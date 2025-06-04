@@ -10,5 +10,6 @@ public class create_course_dto {
     private String course_name;
     private String course_description;
     private Integer course_price;
+    private String course_subject;
 
 }

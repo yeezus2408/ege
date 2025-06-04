@@ -25,3 +25,29 @@ export interface IUserLogin {
     email: string,
     password: string
 }
+
+
+export interface ILesson {
+    id: string, 
+    title: string,
+    description: string,
+    content: string
+}
+
+
+export interface IComment {
+    author: string,
+    content: string
+}
+
+export interface ICourses {
+    id: string,
+    name: string,
+    price: number,
+    description: string,
+    status: string,
+    author_id: string,
+    lessons: Array<ILesson>,
+    comments: Array<IComment>
+}
+

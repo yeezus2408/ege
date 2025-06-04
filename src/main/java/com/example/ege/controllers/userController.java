@@ -2,14 +2,10 @@ package com.example.ege.controllers;
 
 
 import com.example.ege.configs.JwtCore;
-import com.example.ege.models.dtos.create_user_dto;
-import com.example.ege.models.dtos.get_course_dto;
-import com.example.ege.models.dtos.login_dto;
-import com.example.ege.models.dtos.userData_after_login;
+import com.example.ege.models.dtos.*;
 import com.example.ege.models.user;
 import com.example.ege.repositories.userRepository;
 import com.example.ege.services.userService;
-import com.example.ege.utils.CourseMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -36,7 +33,6 @@ public class userController {
     private final userRepository UserRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtCore jwtCore;
-    private final CourseMapper courseMapper;
 
     @GetMapping("/signUp")
     public String signUp() {
@@ -77,9 +73,26 @@ public class userController {
         dataDto.setEmail(dto.getEmail());
         dataDto.setId(targetUser.getId());
         List<get_course_dto> coursesDto = new ArrayList<>();
-        for (int i = 0; i < targetUser.getMyCourses().size(); i++) {
-            courseMapper.map(targetUser.getMyCourses().get(i));
-        }
+        dataDto.setCourses(targetUser.getMyCourses().stream()
+                .map(course -> {
+                    get_course_dto courseDto = new get_course_dto();
+                    courseDto.setId(course.getId());
+                    courseDto.setName(course.getName());
+                    courseDto.setDescription(course.getDescription());
+                    courseDto.setPrice(course.getPrice());
+                    courseDto.setStatus(course.getStatus());
+                    courseDto.setAuthor_id(course.getAuthor().getId());
+                    courseDto.setLessons(course.getLessons().stream()
+                            .map(lesson -> {
+                                get_lesson_dto lDto = new get_lesson_dto();
+                                lDto.setId(lesson.getId());
+                                lDto.setTitle(lesson.getTitle());
+                                lDto.setDescription(lesson.getDescription());
+                                lDto.setContent(lesson.getContent());
+                                return lDto;
+                            }).collect(Collectors.toList()));
+                    return courseDto;
+                }).collect(Collectors.toList()));
         dataDto.setCourses(coursesDto);
         dataDto.setUsername(targetUser.getUsername());
         dataDto.setToken(jwt);
@@ -127,12 +140,26 @@ public class userController {
         dataDto.setUsername(currUser.getUsername());
         dataDto.setToken(jwt);
         dataDto.setBalance(currUser.getBalance());
-        List<get_course_dto> coursesDto = new ArrayList<>();
-        for (int i = 0; i < currUser.getMyCourses().size(); i++) {
-            get_course_dto mapDto = courseMapper.map(currUser.getMyCourses().get(i));
-            coursesDto.add(mapDto);
-        }
-        dataDto.setCourses(coursesDto);
+        dataDto.setCourses(currUser.getMyCourses().stream()
+                .map(course -> {
+                    get_course_dto courseDto = new get_course_dto();
+                    courseDto.setId(course.getId());
+                    courseDto.setName(course.getName());
+                    courseDto.setDescription(course.getDescription());
+                    courseDto.setPrice(course.getPrice());
+                    courseDto.setStatus(course.getStatus());
+                    courseDto.setAuthor_id(course.getAuthor().getId());
+                    courseDto.setLessons(course.getLessons().stream()
+                            .map(lesson -> {
+                                get_lesson_dto lDto = new get_lesson_dto();
+                                lDto.setId(lesson.getId());
+                                lDto.setTitle(lesson.getTitle());
+                                lDto.setDescription(lesson.getDescription());
+                                lDto.setContent(lesson.getContent());
+                                return lDto;
+                            }).collect(Collectors.toList()));
+                    return courseDto;
+                }).collect(Collectors.toList()));
         return ResponseEntity.ok(dataDto);
     }
 

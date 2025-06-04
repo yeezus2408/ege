@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ege Ready</title>
+    <link rel="stylesheet" href="../assets/css/create_course_style.css">
+    <link rel="stylesheet" href="../assets/css/header_style.css">
+    <!-- <meta th:if="${curr != null}" http-equiv="refresh" content="0;URL=http://localhost:8080/profile"> -->
+</head>
+
+    <body>
+        <header class="header" th:fragment="header">
+        <h1 class="name">Банк</h1>
+        <nav>
+            <a href="main.html">Главная</a>
+            <a href="create_course.html">Создать курс</a>
+            <a href="#">Бесплатные курсы</a>
+            <a href="#">Платные курсы</a>
+        </nav>
+
+        <div class="user-profile" id="user-profile">
+            <div class="username-profile" id="username-profile"></div> 
+            <img src="../assets/icons/down-arrow.png" class="down-arrow" id="down-arrow">
+            <div class="dropdown">
+                <a href="profile">Личный кабинет</a>
+                <a href="#" id="logout-button">Выйти</a>
+            </div>
+        </div>
+
+
+        <div class="auth-buttons" id="auth-buttons">
+            <a class="auth-button" href="login.html">Войти</a>
+            <a class="auth-button" href="registration.html">Зарегистрироваться</a>
+        </div>
+        <script>
+            const userProfile = document.querySelector('.user-profile');
+            const dropdown = document.querySelector('.dropdown');
+            const arrow = document.querySelector(".down-arrow");
+
+            userProfile.addEventListener('click', () => {
+                dropdown.style.display = 'block';
+                dropdown.style.opacity = 0;
+                dropdown.style.transform = 'translateY(-10px)';
+                arrow.style.transform = 'rotate(180deg)';
+                
+
+                setTimeout(() => {
+                    dropdown.style.opacity = 1;
+                    dropdown.style.transform = 'translateY(0)';
+                }, 10);
+            });
+
+            window.addEventListener('click', (event) => {
+                if (!event.target.closest('.user-profile') && !event.target.closest('.dropdown')) {
+                    dropdown.style.opacity = 0;
+                    dropdown.style.transform = 'translateY(-10px)';
+                    arrow.style.transform = 'rotate(0deg)';
+                    setTimeout(() => {
+                        dropdown.style.display = 'none';
+                    }, 300); // Задержка для плавного исчезновения
+                }
+            });
+        </script>
+    </header>
+        <div class="glass-container">
+            <div class="login-box">
+                <h2>Создать курс</h2>
+
+                <div class="form">
+                    <input type="text" id="title" name="Title" required placeholder="Title" readonly onfocus="this.removeAttribute('readonly')">
+
+                    <!-- <input type=""" id="password" name="password" required placeholder="Password"> -->
+
+                    <textarea name="description" id="description" required placeholder="Description" readonly onfocus="this.removeAttribute('readonly')"></textarea>
+
+                    <input type="number" name="price" id="price" placeholder="Price">
+
+                    <select name="subject" id="subject" >
+                        <option value="Math">Математика</option>
+                        <option value="RussianL">Русский язык</option>
+                        <option value="Physics">Физика</option>
+                        <option value="Biology">Биология</option>
+                        <option value="Chemistry">Химия</option>
+                        <option value="Social_science">Обществознание</option>
+                        <option value="History">История</option>
+                    </select>
+<br>
+                    <input type="button" class="save" name="save" id="save" value="Создать">
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const token = localStorage.getItem("access-token");
+            document.getElementById("save").onclick = async () => {
+
+                let newCourse = {
+                    course_name : document.getElementById("title").value,
+                    course_description : document.getElementById("description").value,
+                    course_price : document.getElementById("price").value,
+                    course_subject : document.getElementById("subject").value
+                }
+                fetch("http://localhost:8080/course/create_course", {
+                    method: "POST",
+                    headers : {
+                        "Content-Type" : "application/json",
+                        'Authorization' : `Bearer ${localStorage.getItem("access-token")}`
+                    },
+                    body: JSON.stringify(newCourse)
+                })
+            };
+            
+
+            if(token){
+                document.getElementById("user-profile").style.display = "flex";
+                document.getElementById("auth-buttons").style.display = "none";
+                document.getElementById("down-arrow").style.display = "block";
+            } else {
+                document.location.href = "file:///C:/Users/maksi/IdeaProjects/EGE/frontend2.0/templates/notFound.html"
+                document.getElementById("user-profile").style.display = "none";
+                document.getElementById("down-arrow").style.display = "none";
+                document.getElementById("auth-buttons").style.display = "block";
+                
+            }
+        </script>
+    
+    </body>
+
+</html>

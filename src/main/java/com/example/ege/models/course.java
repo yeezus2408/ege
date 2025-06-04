@@ -20,12 +20,16 @@ public class course {
     private Integer price;
     private String description;
     private String status;
+    private String subject;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private user author;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<lesson> lessons = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<comment> comments = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_course",

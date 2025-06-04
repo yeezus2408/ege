@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/assets/css/header_style.css">
+    <title>Document</title>
+</head>
+<body class="header-body" >
+    <header class="header" th:fragment="header">
+        <h1 class="name">Банк</h1>
+        <nav>
+            <a href="#">Главная</a>
+            <a href="#">О нас</a>
+            <a href="#">Контакты</a>
+        </nav>
+
+        <div class="user-profile">
+            <div class="dropdown">
+                <a href="profile">Личный кабинет</a>
+                <a href="logout">Выйти</a>
+            </div>
+        </div>
+
+
+        <div class="auth-buttons">
+            <a class="auth-button" href="../login.html">Войти</a>
+            <a class="auth-button" href="../registration.html">Зарегистрироваться</a>
+        </div>
+        <script>
+            const userProfile = document.querySelector('.user-profile');
+            const dropdown = document.querySelector('.dropdown');
+
+            userProfile.addEventListener('click', () => {
+                dropdown.style.display = 'block';
+                dropdown.style.opacity = 0;
+                dropdown.style.transform = 'translateY(-10px)';
+
+                setTimeout(() => {
+                    dropdown.style.opacity = 1;
+                    dropdown.style.transform = 'translateY(0)';
+                }, 10); // Небольшая задержка для плавного появления
+            });
+
+            window.addEventListener('click', (event) => {
+                if (!event.target.closest('.user-profile') && !event.target.closest('.dropdown')) {
+                    dropdown.style.opacity = 0;
+                    dropdown.style.transform = 'translateY(-10px)';
+                    setTimeout(() => {
+                        dropdown.style.display = 'none';
+                    }, 300); // Задержка для плавного исчезновения
+                }
+            });
+            document.getElementById("logout-button").onclick = () => {
+                localStorage.removeItem("access-token");
+            }
+        </script>
+    </header>
+
+</body>
+
+</html>

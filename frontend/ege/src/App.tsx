@@ -10,6 +10,8 @@ import { getTokenFromLocalStorage } from './helpers/cookiesHelper'
 import { AuthService } from './services/auth.service'
 import { login, logout } from './store/user/userSlice'
 import { Header } from './templates/Header'
+import Main from './templates/main/main'
+import CoursePage from './templates/CoursePage/CoursePage'
 
 function App() {
   const dispath = useAppDispatch();
@@ -44,6 +46,8 @@ function App() {
     <Router>
       <Header links={navLinks}/>
       <Routes>
+        <Route path='/' element={<Main />} />
+        <Route path="/course/getCourse/:id" element={<CoursePage />} />
         <Route path='/user/signUp' element={<SignUp />}/>
         <Route path='/user/signIn' element={<SignIn />}/>
       </Routes>
