@@ -1,22 +1,19 @@
-import { Box, Button, Card, Center, Checkbox, Container, Field, FieldErrorText, Input, Stack, Toast } from "@chakra-ui/react";
+import { Box, Button, Card, Checkbox, Field, FieldErrorText, Input, Stack } from "@chakra-ui/react";
 import { JSX } from "@emotion/react/jsx-runtime";
 import React, { SyntheticEvent } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "../../store/hooks";
 import { AuthService } from "../../services/auth.service";
 import { toast } from "react-toastify"
 
 export default function SignUp(): JSX.Element{
-    const [emailError, setEmailError] = React.useState(false);
+    const [, setEmailError] = React.useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false);
+    const [, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [username, setUsername] = React.useState('');
-    const [usernameError, setUsernameError] = React.useState(false);
+    const [, setUsernameError] = React.useState(false);
     const [usernameErrorMessage, setUsernameErrorMessage] = React.useState('');
-    const navigate = useNavigate()
     
     const validateInputs = () => {
         const email = document.getElementById('email') as HTMLInputElement;
@@ -76,7 +73,7 @@ export default function SignUp(): JSX.Element{
 
 
     return (
-            <Box maxW={'full'} display={'flex'} justifyContent={'center'}>
+            <Box maxW={'full'} display={'flex'} justifyContent={'center'} marginTop={'250px'}>
                 <Card.Root maxW={"600px"} bgColor={"gray.800"} borderColor={"gray.700"} onClick={validateInputs}>
                 <Card.Body>
                     <Card.Title color={"whiteAlpha.800"} marginBottom={8} textAlign={"center"}>Registration</Card.Title>

@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect } from 'react'
 import './App.css'
 import {BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import SignUp from './templates/SignUp/SignUp'
@@ -12,6 +10,7 @@ import { login, logout } from './store/user/userSlice'
 import { Header } from './templates/Header'
 import Main from './templates/main/main'
 import CoursePage from './templates/CoursePage/CoursePage'
+import CreateCourse from './templates/createCourse/CreateCourse'
 
 function App() {
   const dispath = useAppDispatch();
@@ -47,6 +46,7 @@ function App() {
       <Header links={navLinks}/>
       <Routes>
         <Route path='/' element={<Main />} />
+        <Route path='/createCourse' element={<CreateCourse/>} />
         <Route path="/course/getCourse/:id" element={<CoursePage />} />
         <Route path='/user/signUp' element={<SignUp />}/>
         <Route path='/user/signIn' element={<SignIn />}/>

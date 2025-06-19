@@ -14,5 +14,7 @@ public class get_course_dto {
     private String description;
     private String status;
     private Long author_id;
+    private String subject;
+    private List<Integer> starRiting;
     private List<get_lesson_dto> lessons;
 }

@@ -4,10 +4,7 @@ import {
     HStack,
     Link,
     IconButton,
-    Stack,
-    Center,
     Button,
-    Color,
   } from '@chakra-ui/react';
   import { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';

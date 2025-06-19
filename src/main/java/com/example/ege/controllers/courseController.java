@@ -91,6 +91,7 @@ public class courseController {
                     return lDto;
                 }).collect(Collectors.toList()));
         dto.setStatus(finded.get().getStatus());
+        dto.setStarRiting((finded.get().getStarRitings()));
 
         return ResponseEntity.ok().body(dto);
     }
@@ -119,6 +120,7 @@ public class courseController {
                         return lDto;
                     }).collect(Collectors.toList()));
             dto_course.setStatus(course.getStatus());
+            dto_course.setSubject(course.getSubject());
             dto_courses.add(dto_course);
         }
         return ResponseEntity.ok().body(dto_courses);
@@ -166,5 +168,21 @@ public class courseController {
         return ResponseEntity.ok().body(result);
     }
 
+
+    @PostMapping("/{courseId}/addStar")
+    public ResponseEntity<?> addStar(@PathVariable Long courseId, @RequestParam Integer star){
+        Optional<course> findedCourse = courseRepository.findById(courseId);
+        if (!findedCourse.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        course course = findedCourse.get();
+        List<Integer> stars = course.getStarRitings();
+        stars.add(star);
+        course.setStarRitings(stars);
+
+        courseRepository.save(course);
+        return ResponseEntity.ok().body("ok");
+    }
 
 }

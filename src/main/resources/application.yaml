@@ -2,9 +2,9 @@ spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/ege
-    username: postgres
-    password: root
+    url: jdbc:postgresql://80.87.196.247:5432/ege
+    username: admin
+    password: ladrugwar2408
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

@@ -1,7 +1,6 @@
 import { Box, Button, Card, Checkbox, Field, FieldErrorText, Input, Stack } from "@chakra-ui/react";
 import React, { JSX, SyntheticEvent } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { setCookie } from 'typescript-cookie'
 import { toast } from "react-toastify";
 import { AuthService } from "../../services/auth.service";
@@ -9,50 +8,11 @@ import { setTokenToLocalStorage } from "../../helpers/cookiesHelper";
 import { login } from "../../store/user/userSlice";
 
 export default function SignIn(): JSX.Element{
-    const [emailError, setEmailError] = React.useState(false);
-    const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-    const [passwordError, setPasswordError] = React.useState(false);
-    const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+    const [emailErrorMessage] = React.useState('');
+    const [passwordErrorMessage] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const navigate = useNavigate()
     const dispath = useDispatch();
-    
-    // const validateInputs = () => {
-    //     const email = document.getElementById('email') as HTMLInputElement;
-    //     const password = document.getElementById('password') as HTMLInputElement;
-    //     const username = document.getElementById('username') as HTMLInputElement;
-    //     let isValid = true;
-    
-    //     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-    //       setEmailError(true);
-    //       setEmailErrorMessage('Please enter a valid email address.');
-    //       isValid = false;
-    //     } else {
-    //       setEmailError(false);
-    //       setEmailErrorMessage('');
-    //     }
-
-    //     if(!username.value || !/^[a-zA-Z0-9_+]+$/.test(username.value)){
-    //         setUsernameError(true);
-    //         setUsernameErrorMessage("Please enter only numbers/letters");
-    //         isValid = false;
-    //     } else{
-    //         setUsernameError(false);
-    //         setUsernameErrorMessage('');
-    //     }
-    
-    //     if (!password.value || password.value.length < 6) {
-    //       setPasswordError(true);
-    //       setPasswordErrorMessage('Password must be at least 6 characters long.');
-    //       isValid = false;
-    //     } else {
-    //       setPasswordError(false);
-    //       setPasswordErrorMessage('');
-    //     }
-    
-    //     return isValid;
-    //   };
 
     const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -66,7 +26,7 @@ export default function SignIn(): JSX.Element{
         }
     } catch (error) {
         console.error('Login failed:', error);
-        toast.error("Error")
+        toast.error("Неверный пароль или E-Mal.")
     }
         // console.log(role);
         
@@ -79,7 +39,7 @@ export default function SignIn(): JSX.Element{
 
 
     return (
-            <Box maxW={'full'} display={'flex'} justifyContent={'center'} >
+            <Box maxW={'full'} display={'flex'} justifyContent={'center'} marginTop={'250px'}>
                 <Card.Root w={600} bgColor={"gray.800"} borderColor={"gray.700"}>
                 <Card.Body>
                     <Card.Title color={"whiteAlpha.800"} marginBottom={8} textAlign={"center"}>Login</Card.Title>

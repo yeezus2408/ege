@@ -1,5 +1,6 @@
-import { Box, Button, Card, Center, Field, Flex, Input, Spinner, Stack, Text} from "@chakra-ui/react";
+import { Box, Button, Card, Field, Flex, Icon, Input,  Stack, Text} from "@chakra-ui/react";
 import { SyntheticEvent, useEffect, useState } from "react";
+import { BsStar } from 'react-icons/bs';
 import { useParams } from "react-router-dom";
 import { IComment, ICourses } from "../../types/types";
 import { CourseService } from "../../services/course.service";
@@ -8,13 +9,16 @@ import { toast } from "react-toastify";
 
 const CoursePage: React.FC = () => {
   const { id } = useParams();
+  const [hover, setHover] = useState<number>(0);
+
   const courseId = id ?? '';
+  const [rating, setRating] = useState<number>(0);
   const [author, setAuthor] = useState(getUsername())
   if(!author) setAuthor("Аноним");
   const [course, setCourse] = useState<ICourses | null>(null);
   const [comments, setComments] = useState<IComment[] | null>(null);
   const [content, setNewContent] = useState('');
-  const [loading, setLoading] = useState(true);
+
 
   const [openLessonId, setOpenLessonId] = useState<string | null>(null);
 
@@ -31,6 +35,21 @@ const CoursePage: React.FC = () => {
         setComments((prev) => (prev ? [...prev, newComment] : [newComment]));
         setNewContent('');
               toast.success("Posted")
+              
+      } catch (error) {
+          console.error('Comment Failed', error);
+          toast.error("Error")
+      }
+          // console.log(role);
+          
+    
+      };
+
+      const sendStar = async (e: SyntheticEvent) => {
+      e.preventDefault();
+      try {
+        await CourseService.sendStar(courseId, rating);
+              toast.success("Access")
               
       } catch (error) {
           console.error('Comment Failed', error);
@@ -62,7 +81,7 @@ const CoursePage: React.FC = () => {
             if (Array.isArray(response)) {
                 setComments(response);
             } else if (response) {
-                setComments(response);
+                setComments([response]);
             }
         } catch (error) {
             console.error("Ошибка при получении курса:", error);
@@ -91,15 +110,47 @@ const CoursePage: React.FC = () => {
   }
 
   return (
-    <Box maxW="full" display="flex" justifyContent="center" p={4} p={4} pt="80px">
-      <Card.Root w={900} bgColor="gray.800" borderColor="gray.700">
+    <Box maxW="full" display="flex" justifyContent="center" p={4} pt="80px">
+      <Card.Root w={1500} bgColor="gray.800" borderColor="gray.700">
         <Card.Body>
           <Card.Title color="whiteAlpha.800" marginBottom={6} textAlign="center">
             {course.name}
           </Card.Title>
           <Stack gap={5}>
-            
+          <Flex justifyContent="flex-end" mb={4}>
+            <Field.Root maxW="200px" w="full">
+              <Field.Label color="whiteAlpha.800">Ваша оценка курсу</Field.Label>
+              <Flex gap={1} mb={2} justifyContent="flex-end">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Icon
+                    as={BsStar}
+                    key={star}
+                    boxSize={6}
+                    cursor="pointer"
+                    color={(hover || rating) >= star ? "yellow.400" : "gray.500"}
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHover(star)}
+                    onMouseLeave={() => setHover(0)}
+                  />
+                ))}
+              </Flex>
+              <Button colorScheme="yellow" onClick={sendStar}>
+                Оценить
+              </Button>
+            </Field.Root>
+              <Field.Root>
+            <Field.Label color="whiteAlpha.800">Средняя оценка</Field.Label>
+            <Text color="yellow.300" fontSize="xl">
+              {course?.starRiting?.length
+                ? (
+                    course.starRiting.reduce((a, b) => a + b, 0) / course.starRiting.length
+                  ).toFixed(1)
+                : "Пока нет оценок"}
+            </Text>
+          </Field.Root>
 
+          </Flex>
+        
             <Field.Root>
             <Field.Label color="whiteAlpha.800">Уроки: </Field.Label>
                 <Stack margin={'10px'} justifyContent={"center"} w={'full'}>
@@ -137,6 +188,8 @@ const CoursePage: React.FC = () => {
               <Text color="whiteAlpha.800">{course.author_id}</Text>
             </Field.Root>
             <Field.Root>
+
+
             <Field.Label color="whiteAlpha.800">Комментарии</Field.Label>
             <Box mt={4} w={"full"}>
                 <Field.Root>

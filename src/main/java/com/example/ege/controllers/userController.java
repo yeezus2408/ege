@@ -34,10 +34,6 @@ public class userController {
     private final AuthenticationManager authenticationManager;
     private final JwtCore jwtCore;
 
-    @GetMapping("/signUp")
-    public String signUp() {
-        return "SignUp";
-    }
 
 
 

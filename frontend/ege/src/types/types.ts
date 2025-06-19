@@ -36,7 +36,7 @@ export interface ILesson {
 
 
 export interface IComment {
-    author: string,
+    author: string | undefined,
     content: string
 }
 
@@ -47,7 +47,16 @@ export interface ICourses {
     description: string,
     status: string,
     author_id: string,
+    subject: string,
     lessons: Array<ILesson>,
-    comments: Array<IComment>
+    comments: Array<IComment>,
+    starRiting: Array<number>
+}
+
+export interface ICreateCourse{
+    course_name: string, 
+    course_description: string,
+    course_price: string,
+    course_subject: string
 }
 
